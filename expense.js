@@ -20,36 +20,58 @@ const Amount_used=document.getElementById("Amount").value
 const Category_selected=document.getElementById("category").value
 const Text_area=document.getElementById("my_text")
 const displayAmount=document.getElementById("amountdisplay")
+validateExpense()
 
 let User_account;
 if(Expense_name===""||Amount_used===""||Category_selected===""){
   alert("enter all entries")
   return;
+ 
 }
+
+
 const Calculate_expense={
   name: document.getElementById("expense").value,
   amount: document.getElementById("Amount").value,
   category: document.getElementById("category").value
 }
 if(editing===true){
+
+    // const textArea=document.getElementById("my_text1")
 expenses[editingIndex].name=document.getElementById("expense").value
 expenses[editingIndex].amount=document.getElementById("Amount").value
 expenses[editingIndex].category=document.getElementById("category").value
-editing=false;
- editingIndex=""
  localStorage.setItem("fdata",JSON.stringify(expenses))
+ 
+ 
+ return;
+ 
  displayExpenses()
-} 
-
-else{
-expenses.push(Calculate_expense)
-    document.getElementById("expense").value=""
+ 
+ alert("expenses updated successfully")
+ editing=false
+ editingIndex=""
+ document.getElementById("button").textContent = "Add expense"
+document.getElementById("expense").value=""
     document.getElementById("Amount").value=""
     document.getElementById("category").value=""
+    
+    
+} 
+
+else {
+expenses.push(Calculate_expense)
+    
     localStorage.setItem("fdata",JSON.stringify(expenses))
  displayExpenses()
+ editing=false;
+//  editingIndex=""
+ document.getElementById("expense").value=""
+    document.getElementById("Amount").value=""
+    document.getElementById("category").value=""
 }
  
+
 
 
 
@@ -72,7 +94,6 @@ expenses.forEach((combineData,index)=>{
     <p>category:   ${combineData.category}</p>
  <button onclick="deleteExpense(${index})">Delete</button>
   <button onclick="editExpense(${index})">Edit</button>
-  <button onclick="updateExpense(${index})">Update</button>
   </div>
 
 
@@ -94,55 +115,30 @@ localStorage.setItem("fdata",JSON.stringify(expenses))
  displayExpenses()
 
 }
+
 function editExpense(index){
+    validateExpense()
+  editing=true
+editingIndex=index
+
 
 // combineData.name= expenses[index].Amount_used.value
-document.getElementById("expense").value=expenses[index].name
-document.getElementById("Amount").value=expenses[index].amount
-document.getElementById("category").value=expenses[index].category
-localStorage.setItem("fdata",JSON.stringify(expenses))
+document.getElementById("expense").value=expenses[editingIndex].name
+document.getElementById("Amount").value=expenses[editingIndex].amount
+document.getElementById("category").value=expenses[editingIndex].category
+document.getElementById("button").textContent = "Update expense"
 
 }
-function updateExpense(index){
-     const Text_area=document.getElementById("my_text1")
-  expenses[index].name=document.getElementById("expense").value
-  expenses[index].amount=document.getElementById("Amount").value
-  expenses[index].category=document.getElementById("category").value
-  localStorage.setItem("fdata",JSON.stringify(expenses))
-   displayExpenses()
-    document.getElementById("expense").value=""
-    document.getElementById("Amount").value=""
-    document.getElementById("category").value=""
-    // Text_area.textContent="A new update made✅"
+// Next feature
 
+function validateExpense(){
+  let Amount_used=document.getElementById("Amount").value
+if(Amount_used<=0){
+alert("invalid amount, amount should exceed 0.00")
+return;
+}
 }
 
-
-// // const Gdata=localStorage.getItem("fdata")
-//  savedData = localStorage.getItem("fdata")
-
-
-// if(savedData){
-// const display=JSON.parse(savedData)
-
-// let outPut=""
-
-
-// display.forEach((combineData)=>{
-
-//   outPut+= 
-// `<li>name:   ${combineData.name }</li>
-// <li>amount:   ${combineData.amount}</li>
-// <li>category:   ${combineData.category}</li>
-// <br><br>
-
-// `
-// })
-// document.getElementById("my_text").innerHTML=outPut
-// }
-// else{
-// document.getElementById("my_text").textContent="No expense recorded"
-// }
  displayExpenses()
 
 
